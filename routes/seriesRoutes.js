@@ -5,7 +5,7 @@ const {
   getSeries,
   updateSeries,
   deleteSeries,
-} = require("../controllers/series.controller");
+} = require("../controllers/seriesController");
 
 const router = express.Router();
 

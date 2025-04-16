@@ -6,7 +6,7 @@ const {
   updateTest,
   deleteTest,
   getTestsBySeries,
-} = require("../controllers/test.controller");
+} = require("../controllers/testController");
 
 const router = express.Router();
 
