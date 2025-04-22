@@ -10,30 +10,20 @@ const {
   joinSeries,
 } = require("../controllers/userController");
 
+const { isAuthenticated } = require("../middlewares/authMiddleware");
+
 const router = express.Router();
 
-// User Registration
+// Public Routes
 router.post("/register", createUser);
-
-// User Login
 router.post("/login", loginUser);
 
-// Get All Users
-router.get("/", getAllUsers);
+// Protected Routes
+router.get("/", isAuthenticated, getAllUsers);
+router.get("/:id", isAuthenticated, getUser);
+router.put("/:id", isAuthenticated, updateUser);
+router.delete("/:id", isAuthenticated, deleteUser);
 
-// Get User by ID
-router.get("/:id", getUser);
-
-// Update User
-router.put("/:id", updateUser);
-
-// Delete User
-router.delete("/:id", deleteUser);
-
-// Update Test Results
-router.put("/update-test-results", updateTestResults);
-
-// Join Series
-router.put("/join-series", joinSeries);
-
-module.exports = router;
+// Feature Routes
+router.put("/update-test-results", isAuthenticated, updateTestResults);
+router.post("/join-series", isAuthenticated, joinSeries); // Changed to POST

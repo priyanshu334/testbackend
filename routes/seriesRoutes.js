@@ -1,27 +1,17 @@
 const express = require("express");
-const {
-  createSeries,
-  getAllSeries,
-  getSeries,
-  updateSeries,
-  deleteSeries,
-} = require("../controllers/seriesController");
-
 const router = express.Router();
+const upload = require("../middleware/upload");
+const seriesController = require("../controllers/seriesController");
 
-// Create Series
-router.post("/create", createSeries);
+// Create with image
+router.post("/", upload.single("image"), seriesController.createSeries);
 
-// Get All Series
-router.get("/", getAllSeries);
+// Update with image (optional)
+router.put("/:id", upload.single("image"), seriesController.updateSeries);
 
-// Get Single Series
-router.get("/:id", getSeries);
-
-// Update Series
-router.put("/:id", updateSeries);
-
-// Delete Series
-router.delete("/:id", deleteSeries);
+// Other routes
+router.get("/", seriesController.getAllSeries);
+router.get("/:id", seriesController.getSeries);
+router.delete("/:id", seriesController.deleteSeries);
 
 module.exports = router;

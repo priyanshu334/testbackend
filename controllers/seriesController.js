@@ -2,8 +2,10 @@ const Series = require("../models/series");
 const User = require("../models/user"); // For creating series by a user
 
 // Create Series
+
 const createSeries = async (req, res) => {
   const { title, description, tests, price, createdBy, startDate, endDate } = req.body;
+  const image = req.file?.path;
 
   try {
     const user = await User.findById(createdBy);
@@ -17,8 +19,9 @@ const createSeries = async (req, res) => {
       tests,
       price,
       createdBy,
-      startDate,  // Adding startDate to the new Series
-      endDate,    // Adding endDate to the new Series
+      startDate,
+      endDate,
+      image, // saving the image path
     });
 
     await newSeries.save();
@@ -60,11 +63,24 @@ const getSeries = async (req, res) => {
 const updateSeries = async (req, res) => {
   const { id } = req.params;
   const { title, description, tests, price, createdBy, startDate, endDate } = req.body;
+  const image = req.file?.path;
 
   try {
+    const updateData = {
+      title,
+      description,
+      tests,
+      price,
+      createdBy,
+      startDate,
+      endDate,
+    };
+
+    if (image) updateData.image = image;
+
     const updatedSeries = await Series.findByIdAndUpdate(
       id,
-      { title, description, tests, price, createdBy, startDate, endDate },
+      updateData,
       { new: true }
     ).populate("tests").populate("createdBy");
 
@@ -78,6 +94,7 @@ const updateSeries = async (req, res) => {
     res.status(500).json({ message: "Error updating series", error: err.message });
   }
 };
+
 
 // Delete Series
 const deleteSeries = async (req, res) => {
